@@ -47,5 +47,4 @@ services:
   - type: pserv
     name: aqi-db
     plan: free
-    postgresSQLVersion: "15"
-    preDeployCommand: "python backend/db/init_db.py"  # Initialize tables on deploy
+    ipAllowList: []  # Allow all IPs
