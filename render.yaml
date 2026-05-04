@@ -43,8 +43,7 @@ services:
       - key: TRAINING_DATA_PATH
         value: data/raw/aqi.csv
 
+databases:
   # PostgreSQL Database
-  - type: pserv
-    name: aqi-db
+  - name: aqi-db
     plan: free
-    ipAllowList: []  # Allow all IPs
