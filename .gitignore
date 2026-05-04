@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.db
+*.sqlite3
+.env
+.venv/
+venv/
+.envrc
+.ipynb_checkpoints/
+artifacts/*.joblib
+artifacts/*.json
+data/processed/*
+!data/processed/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
+.DS_Store
+streamlit_app.log

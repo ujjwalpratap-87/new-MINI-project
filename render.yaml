@@ -1,0 +1,51 @@
+services:
+  # FastAPI Backend
+  - type: web
+    name: aqi-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aqi-db
+          property: connectionString
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: TRAINING_DATA_PATH
+        value: data/raw/aqi.csv
+
+  # Streamlit Dashboard
+  - type: web
+    name: aqi-dashboard
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aqi-db
+          property: connectionString
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: "true"
+      - key: STREAMLIT_SERVER_ENABLECORS
+        value: "false"
+      - key: TRAINING_DATA_PATH
+        value: data/raw/aqi.csv
+
+  # PostgreSQL Database
+  - type: pserv
+    name: aqi-db
+    plan: free
+    postgresSQLVersion: "15"
+    preDeployCommand: "python backend/db/init_db.py"  # Initialize tables on deploy
